@@ -1,0 +1,560 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════
+   ULTIMATE TEAM DESIGN SYSTEM - Mon 2-0 — Plateforme de gestion de club amateur
+   Style inspiré de FIFA/EA Sports FC Ultimate Team
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ═══ CSS Variables - UT Theme ═══ */
+:root {
+  /* Core Colors — triplets RGB (espace, sans virgule) pour Tailwind rgb(var(--x) / alpha) */
+  --ut-bg: 10 14 23;
+  --ut-surface: 17 24 39;
+  --ut-surface-light: 26 35 50;
+  --ut-border: 30 45 61;
+  --ut-border-bright: 42 63 84;
+  --ut-text-primary: 255 255 255;
+  --ut-text-secondary: 148 163 184;
+  --ut-text-muted: 100 116 139;
+
+  /* Accent Colors */
+  --ut-cyan: #00D4FF;
+  --ut-cyan-rgb: 0, 212, 255;
+  --ut-gold: #FFD700;
+  --ut-gold-rgb: 255, 215, 0;
+  --ut-green: #00FF88;
+  --ut-green-rgb: 0, 255, 136;
+  --ut-red: #FF3366;
+  --ut-red-rgb: 255, 51, 102;
+  --ut-purple: #A855F7;
+  --ut-purple-rgb: 168, 85, 247;
+  
+  /* Glow Effects */
+  --glow-cyan: 0 0 30px rgba(var(--ut-cyan-rgb), 0.4);
+  --glow-gold: 0 0 30px rgba(var(--ut-gold-rgb), 0.4);
+  --glow-red: 0 0 30px rgba(var(--ut-red-rgb), 0.4);
+  --glow-green: 0 0 30px rgba(var(--ut-green-rgb), 0.4);
+}
+
+/* ═══ Thème clair — activé via <html class="light"> ═══ */
+html.light {
+  --ut-bg: 244 246 250;
+  --ut-surface: 255 255 255;
+  --ut-surface-light: 237 240 245;
+  --ut-border: 214 220 230;
+  --ut-border-bright: 180 190 205;
+  --ut-text-primary: 15 23 42;
+  --ut-text-secondary: 51 65 85;
+  --ut-text-muted: 100 116 139;
+}
+
+/* Beaucoup de composants utilisent text-white en dur (pensé pour le fond sombre).
+   Plutôt que de retoucher 57 usages dispersés, on neutralise ici pour le thème clair. */
+html.light .text-white {
+  color: rgb(var(--ut-text-primary));
+}
+
+/* ═══ Base Styles ═══ */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  @apply bg-ut-bg text-ut-text-primary font-sans antialiased overflow-x-hidden;
+  background-image: 
+    radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(168, 85, 247, 0.03) 0%, transparent 50%);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom Scrollbar - Gaming Style */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--ut-bg));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgb(var(--ut-border)) 0%, rgb(var(--ut-border-bright)) 100%);
+  border-radius: 4px;
+  border: 1px solid rgb(var(--ut-bg));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #2a3f54 0%, #3a5068 100%);
+}
+
+/* Selection Color */
+::selection {
+  background: rgba(0, 212, 255, 0.3);
+  color: white;
+}
+
+/* ═══ COMPONENT CLASSES - Ultimate Team Cards ═══ */
+
+/* Base Card Style */
+.ut-card {
+  @apply relative overflow-hidden rounded-2xl;
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.95) 0%, rgba(10, 14, 23, 0.98) 100%);
+  border: 1px solid rgba(30, 45, 61, 0.8);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ut-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.05) 45%,
+    rgba(255, 255, 255, 0.03) 50%,
+    rgba(255, 255, 255, 0.05) 55%,
+    transparent 60%
+  );
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.ut-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow: 
+    0 20px 48px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(0, 212, 255, 0.1);
+}
+
+.ut-card:hover::before {
+  left: 100%;
+}
+
+/* Card Variants by Rarity */
+.ut-card-legendary {
+  @apply ut-card;
+  border-color: rgba(255, 215, 0, 0.4);
+  background: linear-gradient(145deg, rgba(45, 24, 16, 0.9) 0%, rgba(26, 14, 14, 0.95) 100%);
+}
+
+.ut-card-legendary:hover {
+  border-color: rgba(255, 215, 0, 0.7);
+  box-shadow: 
+    0 20px 48px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(255, 215, 0, 0.2),
+    inset 0 0 30px rgba(255, 215, 0, 0.05);
+}
+
+.ut-card-gold {
+  @apply ut-card;
+  border-color: rgba(255, 215, 0, 0.3);
+  background: linear-gradient(145deg, rgba(45, 38, 0, 0.9) 0%, rgba(26, 23, 0, 0.95) 100%);
+}
+
+.ut-card-gold:hover {
+  border-color: rgba(255, 215, 0, 0.6);
+  box-shadow: 
+    0 20px 48px rgba(0, 0, 0, 0.5),
+    0 0 50px rgba(255, 215, 0, 0.15);
+}
+
+.ut-card-silver {
+  @apply ut-card;
+  border-color: rgba(156, 163, 175, 0.3);
+  background: linear-gradient(145deg, rgba(26, 32, 37, 0.95) 0%, rgba(15, 19, 23, 0.98) 100%);
+}
+
+.ut-card-silver:hover {
+  border-color: rgba(192, 192, 192, 0.5);
+  box-shadow: 
+    0 20px 48px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(192, 192, 192, 0.1);
+}
+
+.ut-card-bronze {
+  @apply ut-card;
+  border-color: rgba(205, 127, 50, 0.3);
+  background: linear-gradient(145deg, rgba(37, 32, 21, 0.95) 0%, rgba(23, 20, 16, 0.98) 100%);
+}
+
+.ut-card-cyan {
+  @apply ut-card;
+  border-color: rgba(0, 212, 255, 0.4);
+}
+
+.ut-card-cyan:hover {
+  border-color: rgba(0, 212, 255, 0.7);
+  box-shadow: 
+    0 20px 48px rgba(0, 0, 0, 0.5),
+    0 0 50px rgba(0, 212, 255, 0.2);
+}
+
+/* ═══ Player Card Specific (UT Style) ═══ */
+.ut-player-card {
+  @apply relative p-5 rounded-2xl overflow-hidden;
+  background: linear-gradient(180deg, #1a2332 0%, #111827 100%);
+  border: 2px solid;
+  border-image: linear-gradient(180deg, var(--ut-cyan), rgba(0, 212, 255, 0.3)) 1;
+  position: relative;
+}
+
+.ut-player-card .player-rating {
+  @apply absolute top-3 left-3 w-14 h-14 rounded-xl flex items-center justify-center;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, rgb(var(--ut-surface)) 0%, rgb(var(--ut-bg)) 100%);
+  border: 2px solid var(--ut-cyan);
+  color: var(--ut-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+.ut-player-card .player-position {
+  @apply absolute top-3 right-3 px-2 py-1 rounded-md text-xs font-bold uppercase;
+  background: rgba(0, 212, 255, 0.15);
+  color: var(--ut-cyan);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.ut-player-card .player-name {
+  @apply mt-12 text-lg font-bold truncate;
+}
+
+.ut-player-card .player-info {
+  @apply text-xs text-ut-text-secondary;
+}
+
+/* ═══ Stats Display (UT Attributes) ═══ */
+.ut-stats-grid {
+  @apply grid grid-cols-3 gap-2;
+}
+
+.ut-stat-item {
+  @apply flex flex-col items-center p-2 rounded-lg bg-black/20 border border-white/5;
+}
+
+.ut-stat-value {
+  @apply text-sm font-bold font-mono;
+  color: var(--ut-cyan);
+}
+
+.ut-stat-label {
+  @apply text-[9px] uppercase tracking-wider text-ut-text-muted;
+}
+
+/* Stat Bar (Progress Bar UT Style) */
+.ut-stat-bar {
+  @apply relative w-full h-1.5 bg-black/30 rounded-full overflow-hidden;
+}
+
+.ut-stat-bar-fill {
+  @apply absolute top-0 left-0 h-full rounded-full transition-all duration-700;
+  background: linear-gradient(90deg, var(--ut-cyan) 0%, rgba(0, 212, 255, 0.6) 100%);
+  box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
+}
+
+/* ═══ Badge Styles ═══ */
+.ut-badge {
+  @apply inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider;
+  border: 1px solid;
+  transition: all 0.3s ease;
+}
+
+.ut-badge-cyan {
+  @apply ut-badge;
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.3);
+  color: var(--ut-cyan);
+}
+
+.ut-badge-gold {
+  @apply ut-badge;
+  background: rgba(255, 215, 0, 0.1);
+  border-color: rgba(255, 215, 0, 0.3);
+  color: var(--ut-gold);
+}
+
+.ut-badge-green {
+  @apply ut-badge;
+  background: rgba(0, 255, 136, 0.1);
+  border-color: rgba(0, 255, 136, 0.3);
+  color: var(--ut-green);
+}
+
+.ut-badge-red {
+  @apply ut-badge;
+  background: rgba(255, 51, 102, 0.1);
+  border-color: rgba(255, 51, 102, 0.3);
+  color: var(--ut-red);
+}
+
+.ut-badge-purple {
+  @apply ut-badge;
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.3);
+  color: var(--ut-purple);
+}
+
+/* Live Badge Animation */
+.ut-badge-live {
+  @apply ut-badge-red;
+  animation: livePulse 2s ease-in-out infinite;
+}
+
+.ut-badge-live::before {
+  content: '';
+  @apply w-1.5 h-1.5 rounded-full bg-ut-red mr-1;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* ═══ Button Styles ═══ */
+.ut-button {
+  @apply relative inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-bold;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  border: 1px solid transparent;
+}
+
+.ut-button-primary {
+  @apply ut-button;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 212, 255, 0.1) 100%);
+  border-color: rgba(0, 212, 255, 0.4);
+  color: var(--ut-cyan);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+}
+
+.ut-button-primary:hover {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.3) 0%, rgba(0, 212, 255, 0.15) 100%);
+  border-color: rgba(0, 212, 255, 0.7);
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.ut-button-success {
+  @apply ut-button;
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.2) 0%, rgba(0, 255, 136, 0.1) 100%);
+  border-color: rgba(0, 255, 136, 0.4);
+  color: var(--ut-green);
+}
+
+.ut-button-success:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.3) 0%, rgba(0, 255, 136, 0.15) 100%);
+  border-color: rgba(0, 255, 136, 0.7);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.25);
+  transform: translateY(-2px);
+}
+
+.ut-button-danger {
+  @apply ut-button;
+  background: linear-gradient(135deg, rgba(255, 51, 102, 0.2) 0%, rgba(255, 51, 102, 0.1) 100%);
+  border-color: rgba(255, 51, 102, 0.4);
+  color: var(--ut-red);
+}
+
+.ut-button-danger:hover {
+  background: linear-gradient(135deg, rgba(255, 51, 102, 0.3) 0%, rgba(255, 51, 102, 0.15) 100%);
+  border-color: rgba(255, 51, 102, 0.7);
+  box-shadow: 0 0 30px rgba(255, 51, 102, 0.25);
+  transform: translateY(-2px);
+}
+
+/* Shine effect on hover */
+.ut-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.ut-button:hover::after {
+  left: 100%;
+}
+
+/* ═══ Input Styles ═══ */
+@layer components {
+  .ut-input {
+    @apply w-full px-4 py-3 rounded-xl text-sm bg-ut-bg border border-ut-border;
+    transition: all 0.3s ease;
+    color: rgb(var(--ut-text-primary));
+  }
+
+  .ut-input:focus {
+    outline: none;
+    border-color: var(--ut-cyan);
+    box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1), var(--glow-cyan);
+  }
+
+  .ut-input::placeholder {
+    color: rgb(var(--ut-text-muted));
+  }
+
+  /* Le popup natif d'un <select> a presque toujours un fond clair,
+     peu importe le thème de la page — on force donc un texte lisible
+     spécifiquement pour les <option>, indépendamment de .ut-input. */
+  select.ut-input {
+    /* Sans ça, certains navigateurs rendent le popup natif en sombre
+       (thème OS/navigateur) et nos couleurs forcées ci-dessous ne
+       s'appliquent pas réellement — texte sombre sur popup sombre. */
+    color-scheme: light;
+  }
+
+  select.ut-input option {
+    color: #1e293b;
+    background: #ffffff;
+  }
+}
+
+/* ═══ Glass Effect ═══ */
+.glass-effect {
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(30, 45, 61, 0.5);
+}
+
+.glass-effect-strong {
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(30, 45, 61, 0.6);
+}
+
+/* ═══ Glow Effects Utilities ═══ */
+.glow-cyan {
+  box-shadow: var(--glow-cyan);
+}
+
+.glow-gold {
+  box-shadow: var(--glow-gold);
+}
+
+.glow-red {
+  box-shadow: var(--glow-red);
+}
+
+.glow-green {
+  box-shadow: var(--glow-green);
+}
+
+.glow-purple {
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+}
+
+/* Text Glow */
+.text-glow-cyan {
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+.text-glow-gold {
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+/* ═══ Gradient Text ═══ */
+.gradient-text-cyan {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(135deg, #00D4FF 0%, #00B4D8 100%);
+}
+
+.gradient-text-gold {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+}
+
+.gradient-text-purple {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(135deg, #A855F7 0%, #7C3AED 100%);
+}
+
+/* ═══ Animation Utilities ═══ */
+.animate-delay-100 { animation-delay: 100ms; }
+.animate-delay-200 { animation-delay: 200ms; }
+.animate-delay-300 { animation-delay: 300ms; }
+.animate-delay-500 { animation-delay: 500ms; }
+
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* ═══ Background Patterns ═══ */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-dots-pattern {
+  background-image: radial-gradient(circle, rgba(0, 212, 255, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Stadium/Pitch Background */
+.bg-stadium {
+  background: 
+    radial-gradient(ellipse at 50% 0%, rgba(0, 212, 255, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #0A0E17 0%, #0d1220 100%);
+}
+
+/* ═══ Loading/Skeleton States ═══ */
+.skeleton {
+  @apply relative overflow-hidden bg-ut-surface rounded-lg;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    transparent 100%
+  );
+  animation: shimmer 2s linear infinite;
+}
+
+/* ═══ Responsive Utilities ═══ */
+@media (max-width: 640px) {
+  .hide-mobile { display: none !important; }
+}
+
+@media (min-width: 641px) {
+  .show-mobile-only { display: none !important; }
+}
+
+/* ═══ Print Styles (just in case) ═══ */
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; color: black; }
+}

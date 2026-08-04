@@ -1,0 +1,12 @@
+[build]
+  publish = "frontend_v3/dist"
+  command = "cd frontend_v3 && npm install && npm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "20"
+  VITE_API_URL = "https://api.example.com/api/v1"

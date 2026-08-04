@@ -1,0 +1,49 @@
+services:
+  api:
+    build:
+      context: ./2-0-backend
+    container_name: 2-0-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://2-0_user:2-0_pass@db:5432/2-0_db}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      SECRET_KEY: ${SECRET_KEY:-change-this-secret}
+      ALGORITHM: ${ALGORITHM:-HS256}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-["https://your-frontend-domain.com"]}
+    depends_on:
+      - db
+      - redis
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+  db:
+    image: postgres:16-alpine
+    container_name: 2-0-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-2-0_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-2-0_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-2-0_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    container_name: 2-0-redis
+    ports:
+      - "6379:6379"
+
+  frontend:
+    build:
+      context: ./frontend_v3
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_API_URL: ${VITE_API_URL:-https://api.example.com/api/v1}
+    container_name: 2-0-frontend
+    ports:
+      - "80:80"
+
+volumes:
+  postgres_data:
