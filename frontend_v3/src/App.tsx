@@ -12,6 +12,7 @@ import ClubRegisterRequest from './pages/ClubRegisterRequest';
 import PublicProfiles from './pages/PublicProfiles';
 import HistoryFull from './pages/HistoryFull';
 import Register from './pages/Register';
+import Login from './pages/Login';
 import PendingApproval from './pages/PendingApproval';
 import Dashboard from './pages/Dashboard';
 import Matches from './pages/Matches';
@@ -48,6 +49,7 @@ function App() {
             <Route path="/clubs/:clubId" element={<ClubGate />} />
             <Route path="/clubs/:clubId/register" element={<Register />} />
             <Route path="/pending" element={<PendingApproval />} />
+            <Route path="/login" element={<Login />} />
 
             <Route path="/dashboard" element={withLayout(<Dashboard />)} />
             <Route path="/matches" element={withLayout(<Matches />)} />
@@ -59,8 +61,8 @@ function App() {
               element={withLayout(<AdminRoute><AdminPanel /></AdminRoute>)}
             />
 
-            <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/tactics" element={withLayout(<Tactics />)} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

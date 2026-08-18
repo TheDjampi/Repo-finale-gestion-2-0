@@ -6,6 +6,16 @@
 - une valeur `SECRET_KEY` forte pour le backend
 - un preset public Cloudinary nommé `2-0-uploads` et un cloud name `poq53np4`
 
+## Initialiser le backend (sous-module)
+
+Après clonage du dépôt, initialiser/récupérer le backend avant tout build :
+
+```bash
+git submodule update --init --recursive
+```
+
+Puis vérifier que `2-0-backend/` contient bien le code de l'API.
+
 ## Option de déploiement la plus économique
 
 ### Frontend statique
@@ -35,6 +45,7 @@ Frontend:
 ## Déploiement local proof
 
 ```bash
+git submodule update --init --recursive
 cd 2-0-backend
 docker compose up -d db redis
 pytest -q
@@ -46,6 +57,7 @@ npm run build
 
 ```bash
 cd /home/thedjampi/Bureau/Gestion\ 2-0
+git submodule update --init --recursive
 export VITE_API_URL=https://api.example.com/api/v1
 export SECRET_KEY=replace-with-a-long-random-secret
 export ALLOWED_ORIGINS='["https://your-frontend-domain.com"]'
