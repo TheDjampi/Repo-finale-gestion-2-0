@@ -8,10 +8,13 @@ services:
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql://2-0_user:2-0_pass@db:5432/2-0_db}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
-      SECRET_KEY: ${SECRET_KEY:-change-this-secret}
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY is required}
       ALGORITHM: ${ALGORITHM:-HS256}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-["https://your-frontend-domain.com"]}
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     depends_on:
       - db
       - redis
@@ -26,12 +29,14 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-2-0_db}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
     ports:
       - "5432:5432"
 
   redis:
     image: redis:7-alpine
     container_name: 2-0-redis
+    restart: unless-stopped
     ports:
       - "6379:6379"
 
@@ -42,6 +47,14 @@ services:
       args:
         VITE_API_URL: ${VITE_API_URL:-https://api.example.com/api/v1}
     container_name: 2-0-frontend
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "80:80"
 

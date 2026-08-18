@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { api } from '../lib/api';
+import { api, getAccessToken, setTokens } from '../lib/api';
 import type { UserResponse, TokenResponse } from '../types/api';
 
 interface AuthContextValue {
@@ -19,7 +19,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Au chargement de l'app, si un token existe déjà (session précédente),
   // on tente de récupérer le profil pour restaurer la session automatiquement.
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
+    const token = getAccessToken();
     if (!token) {
       setIsLoading(false);
       return;
@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function refreshUser() {
-    const token = localStorage.getItem('access_token');
+    const token = getAccessToken();
     if (!token) {
       setUser(null);
       return;
@@ -38,24 +38,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { data } = await api.get<UserResponse>('/players/me');
       setUser(data);
     } catch {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
       setUser(null);
     }
   }
 
   async function login(email: string, password: string) {
     const { data } = await api.post<TokenResponse>('/auth/login', { email, password });
-    localStorage.setItem('access_token', data.access_token);
-    localStorage.setItem('refresh_token', data.refresh_token);
+    setTokens(data.access_token, data.refresh_token);
 
     await refreshUser();
   }
 
   function logout() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    setTokens(null, null);
     setUser(null);
+    if (window.location.pathname !== '/') {
+      window.location.href = '/';
+    }
   }
 
   return (
