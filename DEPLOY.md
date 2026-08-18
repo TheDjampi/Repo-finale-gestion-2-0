@@ -6,6 +6,14 @@
 - une valeur `SECRET_KEY` forte pour le backend
 - un preset public Cloudinary nommé `2-0-uploads` et un cloud name `poq53np4`
 
+## Initialiser le sous-module backend
+
+Avant toute commande backend, initialiser le sous-module :
+
+```bash
+git submodule update --init --recursive
+```
+
 ## Option de déploiement la plus économique
 
 ### Frontend statique
@@ -32,6 +40,8 @@ Backend:
 Frontend:
 - `VITE_API_URL`
 
+Ne versionnez jamais les secrets dans le dépôt. Utilisez le store de secrets de votre plateforme (Render Secrets, variables d'environnement Netlify/Vercel, etc.).
+
 ## Déploiement local proof
 
 ```bash
@@ -53,6 +63,8 @@ export CLOUDINARY_CLOUD_NAME=poq53np4
 export CLOUDINARY_UPLOAD_PRESET=2-0-uploads
 docker compose -f docker-compose.prod.yml up -d --build
 ```
+
+`SECRET_KEY` est obligatoire : `docker compose` refusera de démarrer si elle n'est pas définie.
 
 ## Déploiement public conseillé
 

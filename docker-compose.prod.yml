@@ -8,7 +8,7 @@ services:
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql://2-0_user:2-0_pass@db:5432/2-0_db}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
-      SECRET_KEY: ${SECRET_KEY:-change-this-secret}
+      SECRET_KEY: ${SECRET_KEY?SECRET_KEY is required}
       ALGORITHM: ${ALGORITHM:-HS256}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-["https://your-frontend-domain.com"]}
@@ -26,14 +26,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-2-0_db}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
 
   redis:
     image: redis:7-alpine
     container_name: 2-0-redis
-    ports:
-      - "6379:6379"
 
   frontend:
     build:
