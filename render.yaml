@@ -4,7 +4,7 @@ services:
     runtime: docker
     rootDir: 2-0-backend
     dockerContext: ./2-0-backend
-    dockerfilePath: ./2-0-backend/Dockerfile
+    dockerfilePath: Dockerfile
     plan: free
     autoDeploy: true
     envVars:
