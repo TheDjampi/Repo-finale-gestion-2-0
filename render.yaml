@@ -3,7 +3,7 @@ services:
     name: 2-0-api
     runtime: docker
     rootDir: 2-0-backend
-    dockerContext: ./2-0-backend
+    dockerContext: .
     dockerfilePath: Dockerfile
     plan: free
     autoDeploy: true
