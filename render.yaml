@@ -2,6 +2,7 @@ services:
   - type: web
     name: 2-0-api
     runtime: docker
+    rootDir: 2-0-backend
     dockerContext: ./2-0-backend
     dockerfilePath: ./2-0-backend/Dockerfile
     plan: free
